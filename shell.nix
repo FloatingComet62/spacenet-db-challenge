@@ -23,6 +23,9 @@ in stdenv.mkDerivation {
         pkgs.python313Packages.scipy
         pkgs.python313Packages.gnureadline
         pkgs.python313Packages.rasterio
+        pkgs.python313Packages.pyproj
+        pkgs.python313Packages.shapely
+        pkgs.python313Packages.geopandas
         python.pkgs.opencv4
       ];
       ignoreCollisions = true;

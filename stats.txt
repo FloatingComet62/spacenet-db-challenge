@@ -1,4 +1,0 @@
-Height: 246542
-Width: 45363
-Number of Images (Tiles of 2048x2048): 2783
-Number of Channels: 3

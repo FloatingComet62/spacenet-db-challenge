@@ -1,0 +1,9 @@
+Name            Technique	                    Main hypothesis
+---------------------------------------------------------------------------------------
+noop            No change	                    Baseline
+clahe           Local contrast enhancement      Improve roofs in shadows
+gamma           Gamma correction	            Improve dark or bright regions
+sharpen         Unsharp masking                 Improve roof boundaries
+bilateral       Edge-preserving denoising       Reduce texture while preserving edges
+equalize        Global histogram equalization	Improve overall contrast
+edge_enhance    Edge-map blending               Emphasize building outlines

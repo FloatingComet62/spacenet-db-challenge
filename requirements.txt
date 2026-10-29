@@ -1,0 +1,9 @@
+matplotlib
+numpy
+scipy
+gnureadline
+rasterio
+pyproj
+shapely
+geopandas
+opencv-python

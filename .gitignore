@@ -1,2 +1,4 @@
-AOI_8_Mumbai_PS-RGB_COG.tif
-tiles/
+data/
+checkpoints/
+__pycache__/
+papers/
