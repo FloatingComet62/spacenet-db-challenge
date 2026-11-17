@@ -13,7 +13,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 SEED = 111
 BATCH_SIZE = 4
-EPOCHS = 20
+EPOCHS = 60
 LEARNING_RATE = 1e-3
 VAL_FRACTION = 0.2
 NUM_WORKERS = 2
