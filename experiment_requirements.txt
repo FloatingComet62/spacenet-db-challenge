@@ -1,0 +1,10 @@
+# Designed for your existing torch+CUDA environment; do not blindly reinstall torch.
+# Install with: python -m pip install -r experiment_requirements.txt
+numpy>=1.26
+segmentation-models-pytorch>=0.3.4
+rasterio>=1.3
+shapely>=2.0
+opencv-python-headless>=4.8
+Pillow>=10
+matplotlib>=3.8
+pytest>=8

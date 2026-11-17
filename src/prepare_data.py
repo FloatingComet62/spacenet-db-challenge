@@ -36,7 +36,7 @@ for image_id, group in grouped:
         if polygon.is_empty or not polygon.is_valid:
             continue
 
-    polygons.append(polygon)
+        polygons.append(polygon)
 
     mask = rasterize(
         [(polygon, 1) for polygon in polygons],

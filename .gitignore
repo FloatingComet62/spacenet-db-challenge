@@ -4,3 +4,5 @@ __pycache__/
 papers/
 runs/
 logs/
+experiments_output/
+*.zip
