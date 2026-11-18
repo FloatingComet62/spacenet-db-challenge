@@ -239,3 +239,7 @@ immutability, official 0/255 TIFF reading and CSV split export.
 
 See **`README_V5.md`** for the shared three-seed experiment and output interpretation.
 Run `bash experiments_v5.sh` after the six v4 run directories are available.
+
+## V6 — controlled training duration, small-building sampling, optional boundary-weighted loss
+
+See [README_V6.md](README_V6.md). Run `python exp.py v6-study --phase duration --dry-run` to inspect the new non-overwriting 16/60-epoch training plan; then run `python exp.py v6-study --phase duration`. Follow with `--phase sampling` and, optionally, `--phase boundary`. Compare using `python exp.py v6-report --phase full`. These commands never evaluate the held-out test set.

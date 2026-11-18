@@ -165,6 +165,25 @@ def main():
     g5.add_argument('--batch-size',type=int,default=2)
     g5.add_argument('--device',default='auto')
     g5.add_argument('--refresh-cache',action='store_true')
+    v6=sub.add_parser('v6-study',help='VALIDATION ONLY: resumable 16/60 epoch, sampling and boundary studies')
+    v6.add_argument('--phase',choices=['duration','sampling','boundary','full'],default='duration')
+    v6.add_argument('--seeds',nargs='+',type=int,default=[111,222,333])
+    v6.add_argument('--batch-size',type=int,default=2)
+    v6.add_argument('--lr',type=float,default=1e-4)
+    v6.add_argument('--workers',type=int,default=2)
+    v6.add_argument('--stride',type=int,choices=[256,512],default=512)
+    v6.add_argument('--val-every',type=int,default=2)
+    v6.add_argument('--small-area',type=float,default=100.)
+    v6.add_argument('--small-positive-fraction',type=float,default=.35)
+    v6.add_argument('--boundary-weight',type=float,default=.5)
+    v6.add_argument('--device',default='auto')
+    v6.add_argument('--dry-run',action='store_true')
+    v6rep=sub.add_parser('v6-report',help='VALIDATION ONLY: paired duration/sampling/size reports and curves')
+    v6rep.add_argument('--phase',choices=['duration','sampling','boundary','full'],default='full')
+    v6rep.add_argument('--seeds',nargs='+',type=int,default=[111,222,333])
+    v6rep.add_argument('--pixel-only',action='store_true')
+    v6rep.add_argument('--batch-size',type=int,default=2)
+    v6rep.add_argument('--device',default='auto')
     sub.add_parser('split-neighbor-audit',help='List edge-adjacent tiles in different frozen splits')
     args=p.parse_args()
     if args.action=='prepare':
@@ -279,6 +298,16 @@ def main():
               args.thresholds,args.small_areas,args.confidence_cutoffs,
               args.confidence_metrics,args.large_area,args.max_iou_drop,
               args.small_recall_slack,args.small_max,args.medium_max)
+    elif args.action=='v6-study':
+        from experiments.v6 import run_study
+        run_study(phase=args.phase,seeds=args.seeds,batch_size=args.batch_size,lr=args.lr,
+                  workers=args.workers,stride=args.stride,val_every=args.val_every,
+                  small_area=args.small_area,small_fraction=args.small_positive_fraction,
+                  boundary_weight=args.boundary_weight,device=args.device,dry_run=args.dry_run)
+    elif args.action=='v6-report':
+        from experiments.v6 import validation_report
+        validation_report(phase=args.phase,seeds=args.seeds,pixel_only=args.pixel_only,
+                          batch_size=args.batch_size,device=args.device)
     elif args.action=='v5-gallery':
         from experiments.v5 import gallery
         gallery(args.model,args.seed,args.count,args.batch_size,args.device,args.refresh_cache)
