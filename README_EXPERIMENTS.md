@@ -1,3 +1,5 @@
+> **Latest package:** SpaceNet 8 Experiments v4. Start with `README_V4.md` for instance-level postprocessing. This README documents the original training workflow.
+
 > **Multi-seed follow-up:** See [README_MULTISEED.md](README_MULTISEED.md) for the seed 111/222/333 reproducibility study, augmentation diagnosis, and validation-only false-positive overlays. Existing checkpoints are reused when compatible.
 
 # SpaceNet 8 Germany: building segmentation experiments
@@ -232,3 +234,8 @@ python -m pytest -q tests/test_experiments.py
 The synthetic tests check mask coverage with multiple polygons, empty tiles,
 spatial block splitting, overlapping-patch reconstruction, preprocessing
 immutability, official 0/255 TIFF reading and CSV split export.
+
+## V5: Confidence-aware, small-building-preserving postprocessing
+
+See **`README_V5.md`** for the shared three-seed experiment and output interpretation.
+Run `bash experiments_v5.sh` after the six v4 run directories are available.

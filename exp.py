@@ -114,6 +114,57 @@ def main():
     comp3.add_argument('--batch-size',type=int,default=2)
     comp3.add_argument('--device',default='auto')
     comp3.add_argument('--refresh-cache',action='store_true')
+    pp=sub.add_parser('postprocess-study',help='VALIDATION ONLY: instance-F1 threshold, filtering, watershed search')
+    pp.add_argument('--run',required=True)
+    pp.add_argument('--batch-size',type=int,default=2)
+    pp.add_argument('--device',default='auto')
+    pp.add_argument('--refresh-cache',action='store_true')
+    pp.add_argument('--thresholds',type=float,nargs='+',default=[.15,.20,.25,.30,.35,.40,.50,.60])
+    pp.add_argument('--areas',type=int,nargs='+',default=[0,8,16,32,64])
+    pp.add_argument('--peak-distances',type=int,nargs='+',default=[6,12,20])
+    pp.add_argument('--watershed-top',type=int,default=2,help='How many strong binary configurations to try watershed on; 0 skips')
+    pp.add_argument('--max-iou-drop',type=float,default=0.0,help='Maximum tolerated global pixel IoU loss versus unchanged v3 baseline; default 0')
+    ia=sub.add_parser('instance-audit',help='VALIDATION ONLY: diagnose unmatched GT buildings and save crop gallery')
+    ia.add_argument('--run',required=True)
+    ia.add_argument('--selection',choices=['best','baseline'],default='best')
+    ia.add_argument('--batch-size',type=int,default=2)
+    ia.add_argument('--device',default='auto')
+    ia.add_argument('--refresh-cache',action='store_true')
+    ia.add_argument('--count',type=int,default=12)
+    ia.add_argument('--small-max',type=float,default=100)
+    ia.add_argument('--medium-max',type=float,default=1000)
+    ex4=sub.add_parser('compare-v4-external',help='VALIDATION ONLY: pixel+instance scores for genuine external masks on same tiles')
+    ex4.add_argument('--run',required=True)
+    ex4.add_argument('--pred-dir',required=True)
+    ex4.add_argument('--selection',choices=['best','baseline'],default='best')
+    ex4.add_argument('--input-type',choices=['binary','probabilities','logits'],default='binary')
+    ex4.add_argument('--threshold',type=float,default=.5)
+    ex4.add_argument('--channel',type=int,default=0)
+    ex4.add_argument('--batch-size',type=int,default=2)
+    ex4.add_argument('--device',default='auto')
+    ex4.add_argument('--refresh-cache',action='store_true')
+    p5=sub.add_parser('v5-study',help='VALIDATION ONLY: select common confidence-aware policy across seeds')
+    p5.add_argument('--models',nargs='+',default=['raw_bce_dice','augmentation_photometric'])
+    p5.add_argument('--seeds',type=int,nargs='+',default=[111,222,333])
+    p5.add_argument('--batch-size',type=int,default=2)
+    p5.add_argument('--device',default='auto')
+    p5.add_argument('--refresh-cache',action='store_true')
+    p5.add_argument('--thresholds',nargs='+',default=['saved','0.25','0.35'])
+    p5.add_argument('--small-areas',type=int,nargs='+',default=[8,16])
+    p5.add_argument('--confidence-cutoffs',type=float,nargs='+',default=[.60,.80])
+    p5.add_argument('--confidence-metrics',nargs='+',choices=['mean','p90','max'],default=['mean','p90','max'])
+    p5.add_argument('--large-area',type=int,default=64)
+    p5.add_argument('--max-iou-drop',type=float,default=.005)
+    p5.add_argument('--small-recall-slack',type=int,default=0,help='Max number of small GT matches allowed below baseline for EACH seed')
+    p5.add_argument('--small-max',type=float,default=100)
+    p5.add_argument('--medium-max',type=float,default=1000)
+    g5=sub.add_parser('v5-gallery',help='VALIDATION ONLY: small-building v3/v4/v5 before-after gallery')
+    g5.add_argument('--model',default='augmentation_photometric')
+    g5.add_argument('--seed',type=int,default=111)
+    g5.add_argument('--count',type=int,default=6)
+    g5.add_argument('--batch-size',type=int,default=2)
+    g5.add_argument('--device',default='auto')
+    g5.add_argument('--refresh-cache',action='store_true')
     sub.add_parser('split-neighbor-audit',help='List edge-adjacent tiles in different frozen splits')
     args=p.parse_args()
     if args.action=='prepare':
@@ -210,6 +261,27 @@ def main():
         from experiments.v3 import compare_official_validation
         compare_official_validation(args.run,args.pred_dir,args.input_type,args.threshold,
                                     args.channel,args.batch_size,args.device,args.refresh_cache)
+    elif args.action=='postprocess-study':
+        from experiments.v4 import postprocess_study
+        postprocess_study(args.run,args.batch_size,args.device,args.refresh_cache,
+                          args.thresholds,args.areas,args.peak_distances,args.watershed_top,args.max_iou_drop)
+    elif args.action=='instance-audit':
+        from experiments.v4 import instance_audit
+        instance_audit(args.run,args.selection,args.batch_size,args.device,args.refresh_cache,
+                       args.count,args.small_max,args.medium_max)
+    elif args.action=='compare-v4-external':
+        from experiments.v4 import compare_external_instances
+        compare_external_instances(args.run,args.pred_dir,args.selection,args.input_type,
+                                   args.threshold,args.channel,args.batch_size,args.device,args.refresh_cache)
+    elif args.action=='v5-study':
+        from experiments.v5 import study
+        study(args.models,args.seeds,args.batch_size,args.device,args.refresh_cache,
+              args.thresholds,args.small_areas,args.confidence_cutoffs,
+              args.confidence_metrics,args.large_area,args.max_iou_drop,
+              args.small_recall_slack,args.small_max,args.medium_max)
+    elif args.action=='v5-gallery':
+        from experiments.v5 import gallery
+        gallery(args.model,args.seed,args.count,args.batch_size,args.device,args.refresh_cache)
     elif args.action=='export-official-csv':
         from experiments.compare import export_official_csv
         export_official_csv(args.input_csv)
