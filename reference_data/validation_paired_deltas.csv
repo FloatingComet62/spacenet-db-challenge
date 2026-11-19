@@ -1,0 +1,7 @@
+comparison,seed,delta_val_iou,delta_instance_f1,delta_small_recall
+raw 60 vs raw 16,111,0.0,0.0,0.0
+raw 60 vs raw 16,222,0.0,0.0,0.0
+raw 60 vs raw 16,333,0.0,0.0,0.0
+photo 60 vs photo 16,111,0.0,0.0,0.0
+photo 60 vs photo 16,222,0.0007445958570462263,-0.016419823176997084,-0.06451612903225806
+photo 60 vs photo 16,333,0.0,0.0,0.0
