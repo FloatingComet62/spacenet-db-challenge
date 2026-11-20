@@ -1,8 +1,8 @@
-gen_tiles:
-  python src/gen_tiles.py
+view:
+  xdg-open experiment_v7/final_report/report.pdf
 
-info:
-  python src/info.py
+demo:
+  python demo_v7.py
 
-preprocessing:
-  python src/preprocessing.py
+report-gen:
+  python generate_v7_report.py
